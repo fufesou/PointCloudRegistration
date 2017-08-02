@@ -1,0 +1,93 @@
+BaseConvergenceCriteria.MI = 1
+DefaultConvergenceCriteria.AMSE = 0.00001
+DefaultConvergenceCriteria.RMSE = 0.00001
+DefaultConvergenceCriteria.RT = 0.000001
+DefaultConvergenceCriteria.TT = 0.0000001
+
+RotX = 0
+RotY = 0
+RotZ = 0
+TraX = 0
+TraY = 0
+TraZ = 0
+
+SamplerInterpolationCenter.NumK = 1500
+
+SquareCellsInitialization.SizeCMRow = 64
+SquareCellsInitialization.SizeCMCol = 64
+
+PairEstimationNormal2Plane.SPS = 3
+
+EstimationAuxiliaryPairConstraint.PT = 0.1
+EstimationAuxiliaryPairConstraint.ASR = 0.05
+
+CorrespondenceRejectionCurvature.CCT = 0.1
+
+TestFineRegSrcID = TestData\\dragon\\dragon_24_48.ply
+TestFineRegTgtID = TestData\\dragon\\dragon_48.ply
+
+TestCoarseRegSrcID = TestData\\dragon\\dragonSideRight_24\\backup\\dragonSideRight_24_
+TestCoarseRegTgtID = TestData\\dragon\\dragonSideRight_48\\backup\\dragonSideRight_48_
+
+SimilarityTriangle.SSDF = 12.0
+SimilarityTriangle.NCD = 0.25
+SimilarityTriangle.NN = 12
+SimilarityTriangle.GCT = 20000.0
+
+LCPTriangle.CF = 4.0
+LCPTriangle.TEF = 50.0
+LCPTriangle.MR = 0.7
+LCPTriangle.STF = 10
+
+CorrespondenceEstimationExtremeCurvature.FT = 2400
+CorrespondenceEstimationExtremeCurvature.ST = 2400
+CorrespondenceEstimationExtremeCurvature.MGT = 10000
+CorrespondenceEstimationExtremeCurvature.CNP = 30
+CorrespondenceEstimationExtremeCurvature.SD2CF = 1.2
+CorrespondenceEstimationExtremeCurvature.SKNNRMIN = 0.45
+CorrespondenceEstimationExtremeCurvature.SKNNRMAX = 0.99
+CorrespondenceEstimationExtremeCurvature.VSRMIN = 0.75
+CorrespondenceEstimationExtremeCurvature.VSRMAX = 0.99
+
+CorrespondenceEstimationSpinImages.MGT = 10000
+CorrespondenceEstimationSpinImages.SD2CF = 2.0
+CorrespondenceEstimationSpinImages.CRNN = 20
+CorrespondenceEstimationSpinImages.SKNNRMIN = 0.45
+CorrespondenceEstimationSpinImages.SKNNRMAX = 0.99
+CorrespondenceEstimationSpinImages.VSRMIN = 0.80
+CorrespondenceEstimationSpinImages.VSRMAX = 0.99
+CorrespondenceEstimationSpinImages.SDT   = 180
+
+SpinImagesGenerator.BS = 4
+SpinImagesGenerator.RF = 0.2
+SpinImagesGenerator.TB = 20
+SpinImagesGenerator.IW = 80
+SpinImagesGenerator.IH = 80
+SpinImagesGenerator.SA = 180
+SpinImagesGenerator.SDF = 90
+SpinImagesGenerator.NKNN = 100
+SpinImagesGenerator.BT = 0.1
+
+CorrespondenceRejectionRANSAC.CR = 0.7
+CorrespondenceRejectionRANSAC.MNI = 10000
+CorrespondenceRejectionRANSAC.CSD = 0.00002
+
+SamplerExtremeCurvature.EPDF = 30
+SamplerExtremeCurvature.EPNN = 60
+
+SamplerRandom.SN = 800
+
+SamplerSplit.SNMNP = 15
+
+TestSampler = SamplerSplit
+TestSamplerPointCloudID = TestData\\dragon\\dragonSideRight_24\\dragonSideRight_24_Norm.ply
+
+C_SAMPLER = SamplerExtremeCurvature
+C_CORRESPONDENCEESTIMATION = CorrespondenceEstimationSpinImages
+C_CORRESPONDENCEREJECTION = CorrespondenceRejectionLCP
+C_TRANSFORMATIONESTIMATION = TransformationEstimationLCP
+
+F_SAMPLER = SamplerInterpolationCenter
+F_CORRESPONDENCEESTIMATION = CorrespondenceEstimationNormal2Plane
+F_CORRESPONDENCEREJECTION = CorrespondenceRejectionCurvature
+F_TRANSFORMATIONESTIMATION = TransformationEstimationSVD2

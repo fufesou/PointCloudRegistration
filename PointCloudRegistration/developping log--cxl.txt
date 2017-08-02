@@ -1,0 +1,262 @@
+2014/4/15
+1. 想法
+影响文件：
+描述：要不要继承Eigen里的matrix，写个vector3。以便进行length()、operator*()等操作。		解答：不需要了，matrix里有个squaredNorm的函数可以实现这个功能。
+
+2. 问题
+影响文件：ICPType.h CorrespondencePair.h
+描述：交叉引用。BaseCorrespondencePair里定义了Ptr，要在ICPType.h里用该Ptr，应该#include "CorrespondencePairSet.h"；另一方面ICPType.h里定义了RowVector3，而在BaseCorrespondencePair类中使用了RowVector3，应该#include "CorrespondencePairSet.h"。
+
+3. 修改
+影响文件：ICPType.h CorrespondencePair.h
+描述：由于要使用多态的性质，ICPType.h中CorrespondencePairsType的定义由std::vector<CBaseCorrespondencePair>改成std::vector<BaseCorrespondencePairPtr>。并且修改了CBaseCorrespondencePair类。
+
+4. 修改
+影响文件：ICPType.h CorrespondencePair.h
+CICP类改了成CBaseICP类，文件名也相应修改。
+
+5. 修改
+影响文件：BaseICP.h ICPType.h
+描述：类里用const引用，不太方便，改用const智能指针。在ICPType.h里添加一个PointCloudPtr和PointCloudConstPtr定义。
+
+6.修改
+影响文件： 各基类头文件
+描述：为使用多态，同时不出现指针到处调的情况。将各基类构造函数写成protected，同时添加friend class *，添加Ptr与ConstPtr的定义。
+
+7.修改
+影响文件： ConvergenceCriteria.h TransformationEstimation.h
+描述：修改文件名为BaseConvergenceCriteria.h BaseTransformationEstimation.h
+
+8.修改
+影响文件： 所有使用using hivePointCloud::CPointCloud的头文件
+描述：去掉using hivePointCloud::CPointCloud
+
+9.优化
+影响文件： BaseICP.h
+描述： 考虑写一个std::vector<std::pair<unsigned int, unsigned int>>成员变量，pair的first记录input source points的采样点索引，second记录该索引出现的次数。当迭代超过N次，就只算second大于K的索引的correspondence。
+
+2014/4/21
+1. 修改
+影响文件：各基类头文件
+描述： 把friend class boost::shared_ptr<xxx>;去掉，新加一个"ICPBaseObject.h"的文件，增加基类CICPBaseObject，所有基类继承这个类。所有基类智能指针创建方式改为调用makeSharedPtr函数。
+
+2014/4/22
+1. 修改记录 ： 李文强的coarse icp
+(1) Box.h Box.cpp 改成 PointCloudSplitBox.h 与 PointCloudSplitBox.cpp
+(2) 
+影响文件： PointCloudSplitBox.h
+描述： 修改 m_pBoxCells 的名字与类型
+(3)
+影响文件： EliminateErrorPointsPair.h
+描述： 修改接口 void eliminateErrorPointsPair(CorrespondencePairSetType& vioRegistrationPairIndexSet); 改为输入输出分开
+
+2014/4/25
+1. 修改
+影响文件： ICPType.h
+描述： RowVector3改成了ColVector3，所有使用RowVector3的地方都作了相应修改。
+
+2014/4/26
+1. 修改
+影响文件： PointCloudSplitBox.h
+描述： 求m_BoxCellSize的时候，逻辑有问题。原是：Num / Length * Factor，改为Length / Num * Factor。
+
+2. 疑问
+影响文件： SurfaceReconstruction.h SurfaceReconstruction.cpp
+描述： 工程有没有用这个文件
+
+3. 修改
+影响文件：CorrespondencePointPairsAfterAuxiliaryConstraint.h
+描述： ReconstructedSurfaces m_ReconstructedSourceSurfaces; ReconstructedSurfaces m_ReconstructedTargetSurfaces; 均改成const Type& m_Member; 这个类里面没必要用一个完全的拷贝。
+
+2014/4/29
+1. 问题
+影响文件： 多个头文件
+描述： 很多地方用的值拷贝，如果改成智能指针，应该会在效率上提高很多。
+
+2014/4/30
+1. 想法
+影响文件： 包涵继承了CICPBaseObject类的各个类的文件
+描述： makeSharedPtr函数返回的结果也是shared_ptr，可能造成困扰，即写一个非继承于CICPBaseObject的shared_ptr智能指针也用makeSharedPtr创建，然而这样是编译不过的，
+	那么就必须判断是该用new shared_ptr，还是用makeSharedPtr。
+解决办法： 可以定义一个新的类型ICPPtr和新的函数makeICPPtr，包装shared_ptr。
+
+2014/5/1
+1. 问题
+影响文件： 各使用omp的文件
+描述： 使用omp for，必须用signed intergral type，而多个场景下都用了unsigned int 到 signed int的转换。为了使用omp，必须做出判断，或者警告使用者模型的点数应小于 0x1000 0000。
+
+2014/5/4
+1. 修改
+影响文件： EliminateErrorPointsPair.h EliminateErrorPointsPair.cpp
+描述： 修改EliminateErrorPointsPair.h EliminateErrorPointsPair.cpp为CorrespondenceRejectionCriticalPoint.h CorrespondenceRejectionCriticalPoint.cpp
+
+2014/5/5
+1. 问题
+定位： File--PointSamplerUsingCenterInterpolatedPoint.cpp Func--__calculateInterscetPointSetUsingNormal Line--70
+描述： 射线与曲面相交，目前考虑的是某个轴的正方向，但有可能是负方向与对应曲面相交。
+
+2. 问题
+定位：	File--BSplineSurfaceConstruction.h
+		File--SquareCellsForSurfaceReconstruction.h
+描述：  文件名和类名要改，不然实在不知道怎么继续命名了。
+
+3. 问题
+定位：	File--SquareCellsSegmentation.h		Func--segement		Line--12
+描述：	CellMatrix48类型的变量是怎么来的？描述： 修改EliminateErrorPointsPair.h EliminateErrorPointsPair.cpp为CorrespondenceRejectionCriticalPoint.h CorrespondenceRejectionCriticalPoint.cpp
+
+2014/5/6
+1. 修改
+影响文件： CorrespondenceRejectionCriticalPoint.h CorrespondenceRejectionCriticalPoint.cpp
+描述： 在CorrespondenceRejectionCriticalPoint类中添加函数void __findPointPosition(const double& vPosition, unsigned int vCount, ColVector3& voPosition);
+功能： 获取点坐标
+
+2. 问题
+定位：	File--SamplerSplitBox.cpp		Func--__findMaxExtremeCurvaturePoint		Line--95
+描述：	曲率极值点可能是负的极小值点或正的极大值点。最好都用上
+
+2014/6/21
+1. 问题
+定位：	FineRegistration
+描述：	FineRegistration用了一个sisl的库建B-Spline曲面，但一个点能不能建曲面？两个点呢？
+
+2014/5/22
+1. 建议
+定位：
+描述：	使用boost::any的时候，在存入值时最好注明类型，否则可能出错。如下代码会有问题。
+	boost::any AnyVar = 100;	//默认存入signed int类型
+	unsigned int Value = boost::any_cast<unsigned int>(AnyVar);
+	
+2014/5/23
+1. 问题
+定位：	File--CorrespondencePointSet.h		Func--CCorrespondenceBSplineReconstruction构造函数		Line--75
+描述：	加入表示重建曲面的ProjectionAxis的参数，用以计算normal和principle curvature
+
+2014/5/26
+1. 问题
+定位：	File--CorrespondencePointSet.cpp	Func--__computeNormalSet		Line--127
+描述：	计算法线方向不定，导致最后配准对的两个点法线方向相反，计算结果错误。
+
+2014/6/6
+1. 问题
+定位：	File--RegMainDir.h、RegMainDir.cpp
+描述：	无法判断包围盒沿重心对称的情况，但这种情况也不多见
+
+2. 问题
+定位：	File--RegMainDir.cpp		Func--__computeCurCoincidentCoeff		Line--104-107
+描述：	处理所有点x（或y或z）轴上的值均为0，即特殊平面的时候，计算出错
+
+2014/6/9
+1. 问题
+定位：	File--CorrespondencePointSet.h	Func--getNormalSet					Line--19
+描述：	在TransformationEstimationSVD.h的方法中需要normal，但这个方法有问题。而TransformationEstimationSVD2.h方法不需要normal，这个方法是计算结果是正确的。因此不需要normal。
+		暂时保留这个函数是可能要找TransformationEstimationSVD.h方法的错误，并保留这个方法。
+		
+2014/6/10
+1. 问题
+定位：	File--CorrespondencePointSet.h	Func--								Line--
+描述：	CCorrespondenceIndex类设计有问题。目前这个类无法起到索引简化计算的作用，这个类出现的地方完全可以由CCorrespondenceVec3Set代替。
+
+2. 问题
+定位：	File--RegMainDir.h、CorrespondenceEstimationClosestPoints.h		Func--__insertFitPairs		Line--119-125
+描述：	对于表面沿重心对称的模型，配准时的法向量可能是不对应的。想办法减少这种错误，或者忽略这个错误（warning）。
+
+3. 建议
+定位：	File--SamplerClosestPoints.h		Func--_findCorrespondenceSourcePointSet		Line--18
+描述：	这个方法取了模型中的所有点，计算复杂，建议取特征点，参考PCL。
+
+2014/6/12
+1. 问题
+定位：	File--SamplerInterpolationCenter.cpp 	Func--__findInterpolationSurfaceCenterSet	Line--70-96
+描述：	sisl先建曲线，再由曲线建曲面的方法可能有问题。
+
+2014/6/14
+1. 问题
+定位：	File--CorrespondenceRejectionCriticalPoint.cpp	Func--__findRotationAxisSet			Line--90
+描述：	为什么这里计算出的每个rotation axis都要归一化？不会对后面排序造成影响吗？
+状态：	fixed。这里要归一化。
+
+2014/6/17
+1. 问题
+定位：	File--CorrespondenceRejectionCriticalPoint.cpp	Func--__estimateRotationAxis		Line--29
+描述：	如果旋转角是(0, 0, 0)，计算出的rotation axis是错的。
+重要性：critical
+
+2014/6/18
+1. 问题
+定位：	File--CorrespondenceEstimationSplitBox.cpp		Func--__findTargetCorrespondencePointSet	Line--85
+描述：	内存泄漏
+状态：	Fixed
+
+2014/8/5
+1. 建议
+定位：	File--KNNSearch.h
+描述：	有两个地方用着不方便：1.一开始就把number neighbors定死了，我希望在搜索的时候再指定number beighbors	2.有时候我不希望到处传point cloud数据，只传一个KNNSearch对象就好了。
+		但是KNNSearch返回的是index，我不能再由些获取点的信息了。
+		
+2014/11/23
+1.修改
+定位：	FineRegistration
+描述：	原文中查找最大投影面，不一定平行于坐标轴。应该先计算出点云的三维坐标系，将最大投影面找到，再进行三维变换，然后配准。
+
+2014/11/29
+1.bug
+定位：	FineRegistration
+描述：	应该先找最大投影面，现在为了先看效果，就省去了这步，用了XOY轴为最大投影面。
+
+2014/12/2
+1.修改
+定位：	FinRegistration
+描述：	用struct CorrespondencePoint { ColVector3 Pos; ColVector3 Norm; double PricipalCurvature[2]; };似乎比较好
+
+2014/12/11
+1.改进
+定位：	整个配准过程
+描述：	修改迭代结束条件和匹配去噪过程的精度，采用自适应方法。匹配点对越多，要求精确度越高。
+
+2014/12/23
+1.bug
+定位：	CorrespondenceEstimationNormal2Plane.cpp
+描述：	不知道是不是SISL的问题，用重建的曲面求主曲率时，传入的parameter有一点差别，结果就相差很多。比如：
+par0[2] = { 0.5, 0.5 };
+par1[2] = { 0.5, 0.50000000000000011 }	//后面有可能会是机器误差导致计算出现这种结果
+在target point cloud data的第(0,19)个曲面求出来的曲率就是：
+3.7325683515590100,152.55338581171645
+15.727326680952814,154.86317021619064
+
+这是很严重的问题。有三个方法可避免这个问题：
+1.对par取精度调整，四舍五入，但极有可能造成更大的问题。
+2.不再用主曲率进行rejection操作，改用normal。
+3.不用SISL，想其它办法。
+
+2014/12/30
+1.问题
+定位：	CorrespondenceEstimationSplitBox.cpp
+描述：	为啥要用邻居点的曲率均值和方差度量相似度。
+
+2.改进
+定位：	SimilarityMeasurement.cpp
+描述：	原文用10维向量的绝对差值进行相似性度量，这样有问题，因为他们的单位步长都不一样，比如法线夹角和主曲率的。现改用相对差值（与相对误差计算方式相同）。
+
+3.问题
+定位：	meshlab计算曲率
+描述：	meshlab计算k1和k2，有的点k1>k2，有的点k2>k1。
+
+2015/1/5
+1.修改
+定位：	匹配算法
+描述：	以前采样对象是source point cloud上，现在将采样点设置在target point cloud上。有部分代码没改。
+
+2015/1/11
+1.修改
+定位：	IteritiveFit.cpp
+描述：	将初始采集点云从source point cloud改成target point cloud。将会影响所以匹配算法的匹配顺序。
+
+2015/1/26
+1.改进
+定位：	粗配准
+描述：	能不能用曲率变化梯度图来匹配，做成图像配准。
+
+2015/2/16
+1.bug
+定位：	粗配准
+描述：	在before rejection时，两次出现一个点，而这个点仅匹配了一次。

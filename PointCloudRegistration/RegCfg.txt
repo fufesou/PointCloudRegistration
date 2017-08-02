@@ -1,0 +1,222 @@
+// RegSig = Coarse
+// BaseConvergenceCriteria.MI = 1
+
+RegSig = Fine
+BaseConvergenceCriteria.MI = 30
+// // coarse--1 fine--10
+
+DefaultConvergenceCriteria.AMSE = 0.01
+DefaultConvergenceCriteria.RMSE = 0.01
+DefaultConvergenceCriteria.RT = 0.000001
+DefaultConvergenceCriteria.TT = 0.0000001
+
+DefaultConvergenceCriteria.OutputDistanceFile = TestData\\output\\distance_bunny_sic_p_270_315.txt
+
+RotX = 0
+RotY = 0
+RotZ = 0
+TraX = 0
+TraY = 0
+TraZ = 0
+
+ControlMatrixLCSNS.SampleStrID          = SamplerRandom
+ControlMatrixLCSNS.SizeCMRow            = 4
+ControlMatrixLCSNS.SizeCMCol            = 4
+ControlMatrixLCSNS.ZDTF                 = 300.5
+ControlMatrixLCSNS.NumNeibs             = 256
+ControlMatrixLCSNS.ExtendCtrlMat        = 1
+ControlMatrixLCSNS.ExtendLengthFactor   = 0.00001
+ControlMatrixLCSNS.SampleRatio          = 0.01
+ControlMatrixLCSNS.MatrixGenerationType = 1
+// 0--random  1--center
+
+ControlMatrixLCSNSClosest.SampleStrID          = SamplerRandom
+ControlMatrixLCSNSClosest.SizeCMRow            = 4
+ControlMatrixLCSNSClosest.SizeCMCol            = 4
+ControlMatrixLCSNSClosest.ZDTF                 = 300.5
+ControlMatrixLCSNSClosest.NumNeibs             = 150
+ControlMatrixLCSNSClosest.ExtendCtrlMat        = 1
+ControlMatrixLCSNSClosest.ExtendLengthFactor   = 0.00001
+ControlMatrixLCSNSClosest.SampleRatio          = 0.01
+ControlMatrixLCSNSClosest.MatrixGenerationType = 1
+// 0--random  1--center
+
+ControlMatrixLCSNS.CPSFile = TestData\\output\\CorPointPairs\\FineReg_Mid\\ControlMatrix_dragon_lcsns_96_72\\
+ControlMatrixLCSNS.SSFile = TestData\\output\\CorPointPairs\\FineReg_Mid\\ControlMatrix_dragon_lcsns_96_72\\
+ControlMatrixLCSNSClosest.CPSFile = TestData\\output\\CorPointPairs\\FineReg_Mid\\ControlMatrix_dragon_lcsns_96_72\\
+ControlMatrixLCSNSClosest.SSFile = TestData\\output\\CorPointPairs\\FineReg_Mid\\ControlMatrix_dragon_lcsns_96_72\\
+
+SamplerLCSNS.NumK = 2000
+SamplerLCSNSClosest.NumK = 2000
+
+NormalShootingLCSNS.NumNeibP = 150
+NormalShootingLCSNS.LF2M = 2
+NormalShootingLCSNSClosest.CDF = 36.0
+NormalShootingLCSNSClosest.LF2M = 2
+
+CorrespondenceEstimationLCSNS.DAE = 0
+CorrespondenceEstimationLCSNSClosest.DAE = 0
+
+CorrespondenceRejectionLCSNS.DCC = 0
+CorrespondenceRejectionLCSNSClosest.DCC = 0
+
+AuxiliaryConstraintLCSNS.PT = 0.05
+AuxiliaryConstraintLCSNS.ASR = 0.05
+AuxiliaryConstraintLCSNSClosest.PT = 0.05
+AuxiliaryConstraintLCSNSClosest.ASR = 0.05
+
+CorrespondenceRejectionLCSNS.CCT = 0.05
+CorrespondenceRejectionLCSNSClosest.CCT = 0.05
+
+CorrespondenceRejectionLCSNS.CRFile = TestData\\output\\CorPointPairs\\FineReg_Mid\\CurvRatio.txt
+CorrespondenceRejectionLCSNSClosest.CRFile = TestData\\output\\CorPointPairs\\FineReg_Mid\\CurvRatio.txt
+
+CorrespondenceEstimationClosestPoints.NN = 4
+CorrespondenceEstimationClosestPoints.NDT = 0.85
+CorrespondenceEstimationClosestPoints.NVDT = 0.0125
+CorrespondenceEstimationClosestPoints.SDFT = 36.0
+CorrespondenceEstimationClosestPoints.NDFT = 4.0
+
+
+SamplerInterpolationCenter.NumK = 1000
+
+SquareCellsInitialization.SizeCMRow = 80
+SquareCellsInitialization.SizeCMCol = 80
+SquareCellsInitialization.OFPathRoot = TestData\\output\\CorPointPairs\\FineReg_Sample\\bunny_sic_p_270_315\\
+
+PairEstimationNormal2Plane.SPS = 3
+PairEstimationNormal2Plane.PSDF = 36
+
+EstimationAuxiliaryPairConstraint.PT = 0.05
+EstimationAuxiliaryPairConstraint.ASR = 0.05
+
+CorrespondenceRejectionCurvature.CCT = 0.1
+
+TestFineRegSrcID = TestData\\output\\TmpPro\\Tmp_Norm.ply
+TestFineRegTgtID = TestData\\happy\\happy_336\\happy_336_Norm.ply
+
+TestCoarseRegSrcID = TestData\\happy\\happy_312\\happy_312_
+TestCoarseRegTgtID = TestData\\happy\\happy_336\\happy_336_
+//TestCoarseRegTgtID = TestData\\output\\LastTmp\\Last_
+
+CorrespondenceEstimationExtremeCurvature.UseDist2CentRestrection = 1
+CorrespondenceEstimationASI.UseSimTriangle = 1
+CorrespondenceEstimationExtremeCurvature.UseSimTriangle = 1
+CorrespondenceEstimationSpinImages.UseSimTriangle = 1
+
+SimilarityTriangle.SSDF = 6
+SimilarityTriangle.NCD = 0.05
+SimilarityTriangle.NN = 12
+SimilarityTriangle.GCT = 20000.0
+
+LCPTriangle.CF = 4.0
+LCPTriangle.TEF = 50.0
+LCPTriangle.ERR = 0.5
+LCPTriangle.AMR = 0.4
+LCPTriangle.STF = 10
+LCPTriangle.SSI = SamplerRandom
+
+CorrespondenceEstimationExtremeCurvature.FT = 1200
+CorrespondenceEstimationExtremeCurvature.ST = 1200
+CorrespondenceEstimationExtremeCurvature.MGT = 10000
+CorrespondenceEstimationExtremeCurvature.CNP = 10
+CorrespondenceEstimationExtremeCurvature.SD2CF = 0.05
+CorrespondenceEstimationExtremeCurvature.SKNNRMIN = 0.45
+CorrespondenceEstimationExtremeCurvature.SKNNRMAX = 0.99
+CorrespondenceEstimationExtremeCurvature.VSRMIN = 0.40
+CorrespondenceEstimationExtremeCurvature.VSRMAX = 0.99
+
+CorrespondenceEstimationSpinImages.MGT = 10000
+CorrespondenceEstimationSpinImages.SD2CF = 2.0
+CorrespondenceEstimationSpinImages.CRNN = 20
+CorrespondenceEstimationSpinImages.SKNNRMIN = 0.45
+CorrespondenceEstimationSpinImages.SKNNRMAX = 0.99
+CorrespondenceEstimationSpinImages.VSRMIN = 0.40
+CorrespondenceEstimationSpinImages.VSRMAX = 0.99
+CorrespondenceEstimationSpinImages.SDT   = 180
+CorrespondenceEstimationSpinImages.PCADim = 350
+CorrespondenceEstimationSpinImages.NSN = 10
+
+CorrespondenceEstimationASI.EGR = 10000
+CorrespondenceEstimationASI.SSRMIN = 0.35
+CorrespondenceEstimationASI.SSRMAX = 0.99
+CorrespondenceEstimationASI.SDT   = 180
+CorrespondenceEstimationASI.NMS = 3.0
+CorrespondenceEstimationASI.MNMPES = 500
+CorrespondenceEstimationASI.NSN = 5
+CorrespondenceEstimationASI.EGRF = 0.4
+CorrespondenceEstimationSplitSpinImages.SDT = 180
+
+SpinImagesGenerator.BS = 4
+SpinImagesGenerator.RF = 0.2
+SpinImagesGenerator.TB = 30
+SpinImagesGenerator.IW = 80
+SpinImagesGenerator.IH = 80
+SpinImagesGenerator.SA = 180
+SpinImagesGenerator.SDF = 90
+SpinImagesGenerator.NKNN = 100
+SpinImagesGenerator.BT = 0.098
+
+CorrespondenceRejectionRANSAC.CR = 0.7
+CorrespondenceRejectionRANSAC.MNI = 10000
+CorrespondenceRejectionRANSAC.CSD = 0.00002
+
+SamplerExtremeCurvature.EPDF = 20
+SamplerExtremeCurvature.EPNN = 60
+
+SamplerRandom.SN = 300
+
+SamplerSplit.SNMNP = 100
+
+TestSampler = SamplerSplit
+TestSamplerPointCloudID = TestData\\dragon\\drag_48\\backup\\drag_48_Norm.ply
+
+// icrp:0 sic:1 lcsns:1
+// IterativeFit.SPC = 1
+// C_SAMPLER = SamplerExtremeCurvature
+// C_CORRESPONDENCEESTIMATION = CorrespondenceEstimationSpinImages
+// C_CORRESPONDENCEREJECTION = CorrespondenceRejectionLCP
+// C_TRANSFORMATIONESTIMATION = TransformationEstimationLCP
+
+//SIC
+//0--projection 1--closest
+PairEstimationNormal2Plane.CPBT = 0
+CorrespondenceRejectionCurvature.DCC = 0
+CorrespondenceEstimationNormal2Plane.DAC = 0
+IterativeFit.SPC = 1
+F_SAMPLER = SamplerInterpolationCenter
+F_CORRESPONDENCEESTIMATION = CorrespondenceEstimationNormal2Plane
+F_CORRESPONDENCEREJECTION = CorrespondenceRejectionCurvature
+F_TRANSFORMATIONESTIMATION = TransformationEstimationSVD2
+
+//LCSNS
+// IterativeFit.SPC = 0
+// F_SAMPLER = SamplerLCSNSClosest
+// F_CORRESPONDENCEESTIMATION = CorrespondenceEstimationLCSNSClosest
+// F_CORRESPONDENCEREJECTION = CorrespondenceRejectionLCSNSClosest
+// F_TRANSFORMATIONESTIMATION = TransformationEstimationSVD2
+
+//LCSNS
+// F_SAMPLER = SamplerLCSNS
+// IterativeFit.SPC = 1
+// F_CORRESPONDENCEESTIMATION = CorrespondenceEstimationLCSNS
+// F_CORRESPONDENCEREJECTION = CorrespondenceRejectionLCSNS
+// F_TRANSFORMATIONESTIMATION = TransformationEstimationSVD2
+
+//ICRP
+// IterativeFit.SPC = 0
+// F_SAMPLER = SamplerRandom
+// F_CORRESPONDENCEESTIMATION = CorrespondenceEstimationClosestPoints
+// F_CORRESPONDENCEREJECTION = CorrespondenceRejectionClosestPoints
+// F_TRANSFORMATIONESTIMATION = TransformationEstimationSVD2
+
+ResMsgFileName = TestData\\output\\RegMsg.txt
+
+SaveFileName = TestData\\output\\New.ply
+//the first letter after lcsns is referred to the simplified form of the control points matrix building type, 
+//and the second one is referred to the simplified form of the sampling type.
+
+MatchRatio.DTF = 2.0
+
+
+//LCSNS用最近点实现

@@ -1,0 +1,107 @@
+2014/4/24
+1. 问题
+影响文件： 
+描述： Eigen::Matrix<BSpline::CBSplineSurface, -1, -1> 类型编译不过
+
+2. 问题
+影响文件： PointSamplerUsingCenterInterpolatedPoint.h
+描述： findCorrespondenceSourcePointCloud函数的第一个参数名
+
+3. 建议
+影响文件： CorrespondencePointPair.h
+描述： CorrespondencePointPairInitialization的setInitialDoubleCorrespondencePointPairs函数改成findInitialCorrespondencePairs，实现相应改变。把法矢求对应点的过滤方法类作为该类的成员变量。
+
+4.问题
+影响文件： CorrespondencePointPair.cpp
+描述： 214行 if (vDirection == 0)//P---->Q ， 0 的意思最好用变量名或者枚举类型修饰。
+
+2014/4/25
+1.问题
+影响文件：CorrespondencePointPair.h
+描述：计算pi与qi的时候，对P应用R和T，与原Q算交点；反算qi'与pi'的时候，先对Q应用R和T的反位置变换，再与原P求交，得到pi0'，然后对pi0'应用R和T，得到pi'。
+
+2014/4/26
+1. 问题
+影响文件： BSplineSurface.h BSplineSurface.cpp
+描述： 类的接口很多地方应该是const，但是没这样写，用的时候有些奇怪。
+
+
+2014/5/6
+1. 名字改动
+影响文件：SquareCellsForSurfaceReconstruction.h，SquareCellsForSurfaceReconstruction.cpp
+描述：SquareCellsForSurfaceReconstruction---->SquareCellsInitialization
+
+2. 名字改动
+影响文件：太多。。。
+描述：pair<CellMatrix48, EAxis>，凡是这种类型的变量，名字后面均加上WithPlane
+
+20140530
+1. BSSC : reconstructBSplineSurface
+
+2. PEMN2P : __computeIntersectPointWithEnoughSurfacePatchs
+
+2015/3/4
+1. 添加新函数，用于计算旋转后的控制点矩阵
+影响文件：SquareCellsInitialization.h, SquareCellsInitialization.cpp
+描述：void __genAxisTransformedMatrix(const SProjectionCellMatrix& vProjectionCellMatrix, const hiveCommon::EAxis vProjectionAxis, SProjectionCellMatrix& voAxisTransformedMatrix) const;
+
+2. 添加新的成员变量，用于存放旋转后的控制点矩阵
+影响文件：ReconstructedSurfaceData.h， ReconstructedSurfaceData.cpp
+描述：SProjectionCellMatrix m_AxisTransformedMatrix;
+
+3. 接下来：
+PairEstimationMethodNormal2Plane.h, PairEstimationMethodNormal2Plane.cpp
+
+2015/3/7
+1. 修改函数__computeIntersectPointWithEnoughSurfacePatchs
+影响文件：PairEstimationMethodNormal2Plane.h, PairEstimationMethodNormal2Plane.cpp
+描述：改为使用新算法求交
+
+2. 接下来：
+CorrespondencePointSet.h, CorrespondencePointSet.cpp
+需要点、点的UV、面的下标
+
+2015/3/8
+1. 去掉normal的计算
+影响文件：CorrespondencePointSet.h, CorrespondencePointSet.cpp
+描述：去掉计算normal的相关函数
+
+2. 接下来：修改第二次求交函数
+影响文件：EstimationAuxiliaryPairConstraint.h, EstimationAuxiliaryPairConstraint.cpp
+描述：__setUpAuxiliaryTargetCorrespondencePointSet
+
+2015/3/9
+1. 使用新方法计算求交
+影响文件：EstimationAuxiliaryPairConstraint.h, EstimationAuxiliaryPairConstraint.cpp
+描述：修改了__setUpAuxiliaryTargetCorrespondencePointSet函数，改为使用新方法计算求交
+
+2. 接下来：
+（1）去掉Axis：EstimationAuxiliaryPairConstraint.h, EstimationAuxiliaryPairConstraint.cpp
+（2）重写采样
+（3）修改匹配过程的bug
+（4）修改BSpline类-->bicubic
+
+2015/3/11
+1. 去掉所有Axis
+
+2. 修改控制点矩阵的数据结构
+影响文件：所有用到控制点矩阵的地方, ICPType.h
+描述：分为SControlPointsMatrix, ControlPoints
+
+3. 去掉ReconstructedSurfaceData
+
+4. PairEstimationMethodNormal2Plane.cpp  vTgtMatrix 似乎是原值
+
+2015/3/12
+1. 去掉CCorrespondenceBSplineReconstruction类里面的SControlPointsMatrix
+
+2. 接下来，算normal
+
+2015/3/13
+1. 重命名类
+描述：CCorrespondenceBSplineReconstruction-->CCorrespondenceSampler
+
+2. 计算法线和曲率
+影响文件：Bicubic.h, Bicubic.cpp
+描述：	void computeNormal(double vU, double vV, const MatrixDim4 vControlPoints[], ColVector3& voNormal) const;
+		void computePrincipleCurvatures(double vU, double vV, const MatrixDim4 vControlPoints[], std::pair<double, double>& voPrincipleCurvatures) const;

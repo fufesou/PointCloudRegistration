@@ -1,0 +1,15 @@
+CoarseRegistration 引用论文：王蕊，李俊山，刘玲霞，罗蓉，基于几何特征的点云配准算法。华东理工大学学报(自然科学版)，Vol.35 No.5，2009 2 10
+
+2014/4/15
+1. 修改：BaseSampler类的rotation和translation变量没必要传递。
+
+2014/4/18
+1.修改：ICPType.h中定义一个类型std::vector<std::pair<unsigned int,unsigned int>> RegistrationIndicesType,用来存储配准对的索引
+
+2014/5/5
+1.添加注释：PointCloudSplitBox.cpp 132行         //虚拟的一个点，正好存在这样一个点时不能找出来
+
+2014/5/14
+1.修改：在ICPType中添加类型typedef VecColVector3 PointSetType;用来存储坐标形式的点集。   line-22  
+2.修改：在基类CBaseCorrespondencePointSet中添加一个setPointSet（）函数。  line-16
+
